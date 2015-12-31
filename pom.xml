@@ -11,7 +11,7 @@
 
     <groupId>com.netflix.astyanax</groupId>
     <artifactId>astyanax</artifactId>
-    <version>1.56.49-bv2-SNAPSHOT</version>
+    <version>3.8.0-bv6-SNAPSHOT</version>
 
     <name>astyanax</name>
     <description>astyanax developed by Netflix</description>
@@ -43,11 +43,12 @@
         <connection>scm:git:git@github.com:bazaarvoice/astyanax.git</connection>
         <developerConnection>scm:git:git@github.com:bazaarvoice/astyanax.git</developerConnection>
         <url>scm:git:git@github.com:bazaarvoice/astyanax.git</url>
-    </scm>
+      <tag>HEAD</tag>
+  </scm>
 
     <properties>
-        <next.release.version>1.56.49-bv1</next.release.version>
-        <next.development.version>1.56.49-bv2-SNAPSHOT</next.development.version>
+        <next.release.version>3.8.0-bv5</next.release.version>
+        <next.development.version>3.8.0-bv6-SNAPSHOT</next.development.version>
     </properties>
 
     <dependencyManagement>
@@ -100,12 +101,12 @@
             <dependency>
                 <groupId>org.apache.cassandra</groupId>
                 <artifactId>cassandra-all</artifactId>
-                <version>1.2.17</version>
+                <version>2.2.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.cassandra</groupId>
                 <artifactId>cassandra-thrift</artifactId>
-                <version>1.2.17</version>
+                <version>2.2.4</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.servicemix.bundles</groupId>
@@ -157,7 +158,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
-                <version>2.2</version>
+                <version>2.5.1</version>
                 <configuration>
                     <releaseVersion>${next.release.version}</releaseVersion>
                     <developmentVersion>${next.development.version}</developmentVersion>

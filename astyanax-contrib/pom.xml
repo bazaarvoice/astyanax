@@ -5,7 +5,7 @@
     <parent>
         <groupId>com.netflix.astyanax</groupId>
         <artifactId>astyanax</artifactId>
-        <version>1.56.49-bv2-SNAPSHOT</version>
+        <version>3.8.0-bv6-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -17,6 +17,18 @@
         <dependency>
             <groupId>com.netflix.astyanax</groupId>
             <artifactId>astyanax-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.astyanax</groupId>
+            <artifactId>astyanax-cassandra</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.netflix.astyanax</groupId>
+            <artifactId>astyanax-thrift</artifactId>
             <version>${project.version}</version>
         </dependency>
 
