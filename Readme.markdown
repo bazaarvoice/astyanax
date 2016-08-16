@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/bazaarvoice/astyanax.svg?branch=master)](https://travis-ci.org/bazaarvoice/astyanax)
+
 Astyanax
 ========
 Astyanax is a high level Java client for [Apache Cassandra](http://cassandra.apache.org).
