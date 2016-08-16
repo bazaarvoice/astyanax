@@ -47,8 +47,8 @@
   </scm>
 
     <properties>
-        <next.release.version>3.8.0-bv7</next.release.version>
-        <next.development.version>3.8.0-bv8-SNAPSHOT</next.development.version>
+        <next.release.version>3.8.0-bv8</next.release.version>
+        <next.development.version>3.8.0-bv9-SNAPSHOT</next.development.version>
     </properties>
 
     <dependencyManagement>
