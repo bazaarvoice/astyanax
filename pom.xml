@@ -11,7 +11,7 @@
 
     <groupId>com.netflix.astyanax</groupId>
     <artifactId>astyanax</artifactId>
-    <version>3.8.0-bv6</version>
+    <version>3.8.0-bv7-SNAPSHOT</version>
 
     <name>astyanax</name>
     <description>astyanax developed by Netflix</description>
@@ -43,12 +43,12 @@
         <connection>scm:git:git@github.com:bazaarvoice/astyanax.git</connection>
         <developerConnection>scm:git:git@github.com:bazaarvoice/astyanax.git</developerConnection>
         <url>scm:git:git@github.com:bazaarvoice/astyanax.git</url>
-      <tag>astyanax-3.8.0-bv6</tag>
+      <tag>astyanax-3.8.0-bv7</tag>
   </scm>
 
     <properties>
-        <next.release.version>3.8.0-bv6</next.release.version>
-        <next.development.version>3.8.0-bv7-SNAPSHOT</next.development.version>
+        <next.release.version>3.8.0-bv7</next.release.version>
+        <next.development.version>3.8.0-bv8-SNAPSHOT</next.development.version>
     </properties>
 
     <dependencyManagement>
