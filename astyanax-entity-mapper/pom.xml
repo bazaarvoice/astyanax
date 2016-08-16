@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>com.netflix.astyanax</groupId>
+        <groupId>com.bazaarvoice.astyanax</groupId>
         <artifactId>astyanax</artifactId>
         <version>3.8.0-bv8-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
@@ -15,19 +15,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.netflix.astyanax</groupId>
+            <groupId>com.bazaarvoice.astyanax</groupId>
             <artifactId>astyanax-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.astyanax</groupId>
+            <groupId>com.bazaarvoice.astyanax</groupId>
             <artifactId>astyanax-cassandra</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.astyanax</groupId>
+            <groupId>com.bazaarvoice.astyanax</groupId>
             <artifactId>astyanax-recipes</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -42,7 +42,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.netflix.astyanax</groupId>
+            <groupId>com.bazaarvoice.astyanax</groupId>
             <artifactId>astyanax-thrift</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>

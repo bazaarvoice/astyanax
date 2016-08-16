@@ -9,7 +9,7 @@
         <relativePath />
     </parent>
 
-    <groupId>com.netflix.astyanax</groupId>
+    <groupId>com.bazaarvoice.astyanax</groupId>
     <artifactId>astyanax</artifactId>
     <version>3.8.0-bv8-SNAPSHOT</version>
 
