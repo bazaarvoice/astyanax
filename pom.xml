@@ -49,6 +49,9 @@
     <properties>
         <next.release.version>3.8.0-bv8</next.release.version>
         <next.development.version>3.8.0-bv9-SNAPSHOT</next.development.version>
+        <jackson.version>1.9.12</jackson.version>
+
+        <java.minimum.version>1.8</java.minimum.version>
     </properties>
 
     <dependencyManagement>
@@ -131,12 +134,12 @@
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-core-asl</artifactId>
-                <version>1.9.11</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jackson</groupId>
                 <artifactId>jackson-mapper-asl</artifactId>
-                <version>1.9.11</version>
+                <version>${jackson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.codehaus.jettison</groupId>
