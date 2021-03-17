@@ -47,8 +47,6 @@
   </scm>
 
     <properties>
-        <next.release.version>3.8.0-bv8</next.release.version>
-        <next.development.version>3.8.0-bv9-SNAPSHOT</next.development.version>
         <jackson.version>1.9.13</jackson.version>
 
         <java.minimum.version>1.8</java.minimum.version>
@@ -199,10 +197,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
                 <version>2.5.1</version>
-                <configuration>
-                    <releaseVersion>${next.release.version}</releaseVersion>
-                    <developmentVersion>${next.development.version}</developmentVersion>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.owasp</groupId>
