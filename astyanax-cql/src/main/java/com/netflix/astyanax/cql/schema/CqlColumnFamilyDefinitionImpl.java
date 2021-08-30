@@ -1,23 +1,19 @@
+/**
+ * Copyright 2013 Netflix, Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.netflix.astyanax.cql.schema;
-
-import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
-
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Properties;
-import java.util.regex.Pattern;
-
-import org.apache.commons.lang.StringUtils;
-import org.codehaus.jettison.json.JSONException;
-import org.codehaus.jettison.json.JSONObject;
 
 import com.datastax.driver.core.ColumnDefinitions.Definition;
 import com.datastax.driver.core.DataType;
@@ -41,36 +37,54 @@ import com.netflix.astyanax.model.ColumnFamily;
 import com.netflix.astyanax.serializers.AnnotatedCompositeSerializer;
 import com.netflix.astyanax.serializers.AnnotatedCompositeSerializer.ComponentSerializer;
 import com.netflix.astyanax.serializers.ComparatorType;
+import org.apache.commons.lang.StringUtils;
+import org.codehaus.jettison.json.JSONException;
+import org.codehaus.jettison.json.JSONObject;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+import java.util.regex.Pattern;
+
+import static com.datastax.driver.core.querybuilder.QueryBuilder.eq;
 
 /**
  * Impl for {@link ColumnFamilyDefinition} interface that constructs it's state from the java driver {@link ResultSet}
- * 
+ *
  * @author poberai
  *
  */
 public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 
-	private Session session; 
-	
-	private String cfName; 
+	private Session session;
+
+	private String cfName;
 	private String keyspaceName;
-	
+
 	private Map<String, Object> optionsMap = new HashMap<String, Object>();
-	
+
 	private List<ColumnDefinition> partitionKeyList = new ArrayList<ColumnDefinition>();
 	private List<ColumnDefinition> clusteringKeyList = new ArrayList<ColumnDefinition>();
 	private List<ColumnDefinition> regularColumnList = new ArrayList<ColumnDefinition>();
 	private List<ColumnDefinition> allColumnsDefinitionList = new ArrayList<ColumnDefinition>();
-	
+
 	private String[] allPkColNames;
-	
-	private AnnotatedCompositeSerializer<?> compositeSerializer = null; 
-	
+
+	private AnnotatedCompositeSerializer<?> compositeSerializer = null;
+
 	private boolean alterTable = false;
 
 	private CFMutationQueryGen mutationQueryGen = null;
 	private CFRowQueryGen rowQueryGen = null;
-	
+
 	public CqlColumnFamilyDefinitionImpl(Session session) {
 		this.session = session;
 	}
@@ -82,13 +96,13 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 	public CqlColumnFamilyDefinitionImpl(Session session, String keyspace, Map<String, Object> options) {
 		this.session = session;
 		this.keyspaceName = keyspace;
-		
+
 		if (options == null) {
 			options = new HashMap<String, Object>();
 		}
 		initFromMap(options);
 	}
-	
+
 	public CqlColumnFamilyDefinitionImpl(Session session, Row row) {
 		initFromResultSet(session, row);
 		mutationQueryGen = new CFMutationQueryGen(session, keyspaceName, this);
@@ -97,42 +111,42 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 
 	public CqlColumnFamilyDefinitionImpl(Session session, String keyspace, ColumnFamily<?, ?> columnFamily, Map<String, Object> options) {
 		this.session = session;
-		
+
 		Preconditions.checkArgument(columnFamily != null, "ColumnFamily cannot be null");
 
 		if (options == null) {
 			options = new HashMap<String, Object>();
 		}
-		
+
 		keyspaceName = keyspace;
 		cfName = columnFamily.getName();
 
 		optionsMap.put("key_validator", columnFamily.getKeySerializer().getComparatorType().getClassName());
 		optionsMap.put("comparator", columnFamily.getColumnSerializer().getComparatorType().getClassName());
 		optionsMap.put("default_validator", columnFamily.getDefaultValueSerializer().getComparatorType().getClassName());
-		
+
 		if (columnFamily.getColumnSerializer() instanceof AnnotatedCompositeSerializer) {
 			compositeSerializer = (AnnotatedCompositeSerializer<?>) columnFamily.getColumnSerializer();
 		}
 		initFromMap(options);
 	}
-	
-	
+
+
 	private void initFromMap(Map<String, Object> options) {
-		
+
 		String cName = (String) options.get("name");
 		if (cName != null) {
 			cfName = cName;
 			options.remove("name");
 		}
-		
+
 		String kName = (String) options.get("keyspace");
 		if (kName != null) {
 			keyspaceName = kName;
 		}
-		
+
 		this.optionsMap.putAll(options);
-		
+
 		if (optionsMap.containsKey("key_validation_class")) {
 			optionsMap.put("key_validator", optionsMap.remove("key_validation_class"));
 		}
@@ -143,9 +157,9 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			optionsMap.put("default_validator", optionsMap.remove("default_validation_class"));
 		}
 	}
-	
 
-	
+
+
 	private void initFromResultSet(Session session, Row row) {
 
 		if (row == null) {
@@ -158,20 +172,20 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 		this.cfName = row.getString("columnfamily_name");
 
 		List<Definition> colDefs = row.getColumnDefinitions().asList();
-		 for (Definition colDef : colDefs) {
-			 
-			 String colName = colDef.getName();
-			 DataType dataType = colDef.getType();
-			 Object value = DataTypeMapping.getDynamicColumn(row, colName, dataType);
-			 optionsMap.put(colName, value);
-		 }
-		readColDefinitions();
-		
-		/**
-		if (partitionKeyList.size() == 0) {
-			readColDefinitionsForCass12();
+		for (Definition colDef : colDefs) {
+
+			String colName = colDef.getName();
+			DataType dataType = colDef.getType();
+			Object value = DataTypeMapping.getDynamicColumn(row, colName, dataType);
+			optionsMap.put(colName, value);
 		}
-		*/
+		readColDefinitions();
+
+		/**
+		 if (partitionKeyList.size() == 0) {
+		 readColDefinitionsForCass12();
+		 }
+		 */
 	}
 
 	private void processCompositeComparator() {
@@ -183,10 +197,10 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			clusteringKeyList.add(column);
 		}
 	}
-	
+
 	private void processCompositeComparatorSpec(String comparatorSpec) {
 		// e.g  CompositeType(UTF8Type, LongType, UTF8Type)
-		
+
 		String regex = "[\\(,\\)]";
 		Pattern pattern = Pattern.compile(regex);
 		String[] parts = pattern.split(comparatorSpec);
@@ -198,18 +212,18 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			clusteringKeyList.add(column);
 		}
 	}
-	
+
 	private void createColumnDefinitions() {
 
 		String keyClass = (String) optionsMap.remove("key_validator");
-		
+
 		String defaultBytesType = ComparatorType.BYTESTYPE.getTypeName();
-		
+
 		keyClass = (keyClass == null) ?	keyClass = defaultBytesType : keyClass;
-		
+
 		String comparatorClass = (String) optionsMap.remove("comparator");
 		comparatorClass = (comparatorClass == null) ?	comparatorClass = defaultBytesType : comparatorClass;
-		
+
 		String dataValidationClass = (String) optionsMap.remove("default_validator");
 		dataValidationClass = (dataValidationClass == null) ?	dataValidationClass = defaultBytesType : dataValidationClass;
 
@@ -228,91 +242,91 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 		ColumnDefinition valueColumn = new CqlColumnDefinitionImpl().setName("value").setValidationClass(dataValidationClass);
 		this.regularColumnList.add(valueColumn);
 	}
-	
+
 	/**
-	private void readColDefinitionsForCass12() {
+	 private void readColDefinitionsForCass12() {
 
-		String defaultBytesType = ComparatorType.BYTESTYPE.getTypeName();
+	 String defaultBytesType = ComparatorType.BYTESTYPE.getTypeName();
 
-		String keyClass = (String) optionsMap.get("key_validator");
-		keyClass = (keyClass == null) ?	keyClass = defaultBytesType : keyClass;
-		
-		String comparatorClass = (String) optionsMap.get("comparator");
-		comparatorClass = (comparatorClass == null) ?	comparatorClass = defaultBytesType : comparatorClass;
-		
-		String dataValidationClass = (String) optionsMap.get("default_validator");
-		dataValidationClass = (dataValidationClass == null) ?	dataValidationClass = defaultBytesType : dataValidationClass;
+	 String keyClass = (String) optionsMap.get("key_validator");
+	 keyClass = (keyClass == null) ?	keyClass = defaultBytesType : keyClass;
 
-		ColumnDefinition key = new CqlColumnDefinitionImpl().setName("key").setValidationClass(keyClass);
-		partitionKeyList.add(key);
+	 String comparatorClass = (String) optionsMap.get("comparator");
+	 comparatorClass = (comparatorClass == null) ?	comparatorClass = defaultBytesType : comparatorClass;
 
-		if (compositeSerializer != null) {
-			processCompositeComparator();
-		} else if (comparatorClass.contains("CompositeType")) {
-			processCompositeComparatorSpec(comparatorClass);
-		} else {
-			ColumnDefinition column1 = new CqlColumnDefinitionImpl().setName("column1").setValidationClass(comparatorClass);
-			clusteringKeyList.add(column1);
-		}
+	 String dataValidationClass = (String) optionsMap.get("default_validator");
+	 dataValidationClass = (dataValidationClass == null) ?	dataValidationClass = defaultBytesType : dataValidationClass;
 
-		ColumnDefinition valueColumn = new CqlColumnDefinitionImpl().setName("value").setValidationClass(dataValidationClass);
-		this.regularColumnList.add(valueColumn);
-		
-		this.allColumnsDefinitionList.addAll(partitionKeyList);
-		this.allColumnsDefinitionList.addAll(clusteringKeyList);
-		this.allColumnsDefinitionList.addAll(regularColumnList);
-		
-		List<String> allPrimaryKeyColNames = new ArrayList<String>();
-		for (ColumnDefinition colDef : partitionKeyList) {
-			allPrimaryKeyColNames.add(colDef.getName());
-		}
-		for (ColumnDefinition colDef : clusteringKeyList) {
-			allPrimaryKeyColNames.add(colDef.getName());
-		}
-		
-		allPkColNames = allPrimaryKeyColNames.toArray(new String[allPrimaryKeyColNames.size()]);
-	}
-	*/
-	
+	 ColumnDefinition key = new CqlColumnDefinitionImpl().setName("key").setValidationClass(keyClass);
+	 partitionKeyList.add(key);
+
+	 if (compositeSerializer != null) {
+	 processCompositeComparator();
+	 } else if (comparatorClass.contains("CompositeType")) {
+	 processCompositeComparatorSpec(comparatorClass);
+	 } else {
+	 ColumnDefinition column1 = new CqlColumnDefinitionImpl().setName("column1").setValidationClass(comparatorClass);
+	 clusteringKeyList.add(column1);
+	 }
+
+	 ColumnDefinition valueColumn = new CqlColumnDefinitionImpl().setName("value").setValidationClass(dataValidationClass);
+	 this.regularColumnList.add(valueColumn);
+
+	 this.allColumnsDefinitionList.addAll(partitionKeyList);
+	 this.allColumnsDefinitionList.addAll(clusteringKeyList);
+	 this.allColumnsDefinitionList.addAll(regularColumnList);
+
+	 List<String> allPrimaryKeyColNames = new ArrayList<String>();
+	 for (ColumnDefinition colDef : partitionKeyList) {
+	 allPrimaryKeyColNames.add(colDef.getName());
+	 }
+	 for (ColumnDefinition colDef : clusteringKeyList) {
+	 allPrimaryKeyColNames.add(colDef.getName());
+	 }
+
+	 allPkColNames = allPrimaryKeyColNames.toArray(new String[allPrimaryKeyColNames.size()]);
+	 }
+	 */
+
 	private void readColDefinitions() {
-		
+
 		// VALUE COLUMNS AND COLUMNS THAT ARE NOT PART OF THE PRIMARY KEY
 		Statement query = QueryBuilder.select().from("system", "schema_columns")
 				.where(eq("keyspace_name", keyspaceName))
 				.and(eq("columnfamily_name", cfName));
-		
+
 		ResultSet rs = session.execute(query);
 		List<Row> rows = rs.all();
 		if (rows != null && rows.size() > 0) {
-			
+
 			List<CqlColumnDefinitionImpl> tmpList = new ArrayList<CqlColumnDefinitionImpl>();
-			
+
 			for (Row row : rows) {
 				CqlColumnDefinitionImpl colDef = new CqlColumnDefinitionImpl(row);
 				switch (colDef.getColumnType()) {
-				case partition_key:
-					partitionKeyList.add(colDef);
-					allColumnsDefinitionList.add(colDef);
-					break;
-				case clustering_key:
-					tmpList.add(colDef);
-					allColumnsDefinitionList.add(colDef);
-					break;
-				case regular:
-					regularColumnList.add(colDef);
-					allColumnsDefinitionList.add(colDef);
-					break;
-				case compact_value:
-					regularColumnList.add(colDef);
-					allColumnsDefinitionList.add(colDef);
-					break;
+					case partition_key:
+						partitionKeyList.add(colDef);
+						allColumnsDefinitionList.add(colDef);
+						break;
+					case clustering_key:
+						tmpList.add(colDef);
+						allColumnsDefinitionList.add(colDef);
+						break;
+					case regular:
+						regularColumnList.add(colDef);
+						allColumnsDefinitionList.add(colDef);
+						break;
+					case compact_value:
+						regularColumnList.add(colDef);
+						allColumnsDefinitionList.add(colDef);
+						break;
 				}
 			}
 
 			Collections.sort(tmpList);
 			clusteringKeyList.addAll(tmpList);
 			tmpList = null;
-			
+
 			List<String> allPrimaryKeyColNames = new ArrayList<String>();
 			for (ColumnDefinition colDef : partitionKeyList) {
 				allPrimaryKeyColNames.add(colDef.getName());
@@ -320,7 +334,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			for (ColumnDefinition colDef : clusteringKeyList) {
 				allPrimaryKeyColNames.add(colDef.getName());
 			}
-			
+
 			allPkColNames = allPrimaryKeyColNames.toArray(new String[allPrimaryKeyColNames.size()]);
 		}
 	}
@@ -453,7 +467,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 		return fromJsonString((String) optionsMap.get("compression_parameters"));
 	}
 
-	
+
 	@Override
 	public ColumnFamilyDefinition setBloomFilterFpChance(Double chance) {
 		optionsMap.put("bloom_filter_fp_chance", chance);
@@ -587,7 +601,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 	public ColumnFamilyDefinition setKeyAlias(ByteBuffer alias) {
 		throw new UnsupportedOperationException("Operation not supported");
 	}
-	
+
 	@Override
 	public ByteBuffer getKeyAlias() {
 		return null;
@@ -618,7 +632,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 		optionsMap.put("key_validator", keyValidationClass);
 		return this;
 	}
-	
+
 	@Override
 	public String getKeyValidationClass() {
 		return (String) optionsMap.get("key_validator");
@@ -635,7 +649,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 	public List<ColumnDefinition> getPartitionKeyColumnDefinitionList() {
 		return partitionKeyList;
 	}
-	
+
 	public List<ColumnDefinition> getClusteringKeyColumnDefinitionList() {
 		return clusteringKeyList;
 	}
@@ -689,12 +703,12 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 	@Override
 	public Collection<FieldMetadata> getFieldsMetadata() {
 		List<FieldMetadata> list = new ArrayList<FieldMetadata>();
-		
+
 		for (String key : optionsMap.keySet()) {
 			Object value = optionsMap.get(key);
-			
+
 			Class<?> clazz = value.getClass();
-			
+
 			String name = key.toUpperCase();
 			String type = clazz.getSimpleName().toUpperCase();
 			boolean isContainer = Collection.class.isAssignableFrom(clazz) || Map.class.isAssignableFrom(clazz);
@@ -721,35 +735,35 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 
 	@Override
 	public void setProperties(Properties additionalProperties) throws Exception {
-		
+
 		Map<String, Object> props = propertiesToMap(additionalProperties);
 		optionsMap.putAll(props);
 	}
 
-	
+
 	public OperationResult<SchemaChangeResult> execute() {
-		
+
 		createColumnDefinitions();
-		
+
 		String query = (alterTable) ? getUpdateQuery() : getCreateQuery();
 		ResultSet rs = session.execute(query);
 
 		return new CqlOperationResultImpl<SchemaChangeResult>(rs, null);
 	}
-	
+
 	private String getCreateQuery() {
 		StringBuilder sb = new StringBuilder("CREATE TABLE ");
 		sb.append(keyspaceName).append(".").append(cfName);
 		sb.append(" ( ");
-		
+
 		boolean compositePrimaryKey = clusteringKeyList.size() > 0;
-		
+
 		if (!compositePrimaryKey) {
-			
+
 			appendColDefinition(sb, partitionKeyList.iterator());
 			sb.append(" PRIMARY KEY, ");
 			appendColDefinition(sb, regularColumnList.iterator());
-			
+
 		} else {
 			appendColDefinition(sb, partitionKeyList.iterator());
 			sb.append(" ,");
@@ -760,66 +774,66 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			appendPrimaryKeyDefinition(sb, partitionKeyList.iterator(), clusteringKeyList.iterator());
 			sb.append(") ");
 		}
-		
+
 		sb.append(")");
-		
+
 		if (optionsMap.size() > 0) {
 			sb.append(" WITH ");
-			
+
 			Iterator<String> propIter = optionsMap.keySet().iterator();
 			while(propIter.hasNext()) {
-				
+
 				String pKey = propIter.next();
 				Object pValue = optionsMap.get(pKey);
-				
+
 				if (pValue == null) {
 					continue;
 				}
-				
+
 				if (pValue instanceof String) {
 					sb.append(pKey).append(" = '").append(pValue).append("'");
 				} else {
 					sb.append(pKey).append(" = ").append(pValue);
 				}
-				
-								
+
+
 				if (propIter.hasNext()) {
 					sb.append(" AND ");
 				}
 			}
 		}
-		
+
 		String query = sb.toString();
 
 		return query;
 	}
 
 	private String getUpdateQuery() {
-		
+
 		StringBuilder sb = new StringBuilder("ALTER TABLE ");
 		sb.append(keyspaceName).append(".").append(cfName);
-		
-			sb.append(" WITH ");
-			
-			Iterator<String> propIter = optionsMap.keySet().iterator();
-			while(propIter.hasNext()) {
-				
-				String pKey = propIter.next();
-				Object pValue = optionsMap.get(pKey);
-				
-				sb.append(pKey).append(" = ").append(pValue);
-				
-				if (propIter.hasNext()) {
-					sb.append(" AND ");
-				}
+
+		sb.append(" WITH ");
+
+		Iterator<String> propIter = optionsMap.keySet().iterator();
+		while(propIter.hasNext()) {
+
+			String pKey = propIter.next();
+			Object pValue = optionsMap.get(pKey);
+
+			sb.append(pKey).append(" = ").append(pValue);
+
+			if (propIter.hasNext()) {
+				sb.append(" AND ");
 			}
+		}
 		return sb.toString();
 	}
 
 	private void appendColDefinition(StringBuilder sb, Iterator<ColumnDefinition> iter) {
-		
+
 		while (iter.hasNext()) {
-			CqlColumnDefinitionImpl colDef = (CqlColumnDefinitionImpl) iter.next(); 
+			CqlColumnDefinitionImpl colDef = (CqlColumnDefinitionImpl) iter.next();
 			sb.append(colDef.getName()).append(" ").append(colDef.getCqlType());
 			if (iter.hasNext()) {
 				sb.append(", ");
@@ -828,9 +842,9 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 	}
 
 	private void appendPrimaryKeyDefinition(StringBuilder sb, Iterator<ColumnDefinition> iter1, Iterator<ColumnDefinition> iter2) {
-		
+
 		while (iter1.hasNext()) {
-			CqlColumnDefinitionImpl colDef = (CqlColumnDefinitionImpl) iter1.next(); 
+			CqlColumnDefinitionImpl colDef = (CqlColumnDefinitionImpl) iter1.next();
 			sb.append(colDef.getName());
 			if (iter1.hasNext()) {
 				sb.append(", ");
@@ -840,7 +854,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			sb.append(", ");
 
 			while (iter2.hasNext()) {
-				CqlColumnDefinitionImpl colDef = (CqlColumnDefinitionImpl) iter2.next(); 
+				CqlColumnDefinitionImpl colDef = (CqlColumnDefinitionImpl) iter2.next();
 				sb.append(colDef.getName());
 				if (iter2.hasNext()) {
 					sb.append(", ");
@@ -848,7 +862,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 			}
 		}
 	}
-	
+
 	private static Map<String, Object> propertiesToMap(Properties props) {
 		Map<String, Object> root = Maps.newTreeMap();
 		if (props == null) {
@@ -867,12 +881,12 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 		}
 		return root;
 	}
-	
+
 	private static String toJsonString(Map<String, String> options) {
 		if (options == null) {
 			return null;
 		}
-		
+
 		JSONObject json = new JSONObject();
 		for(String key : options.keySet()) {
 			try {
@@ -883,7 +897,7 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 		}
 		return json.toString();
 	}
-	
+
 	private static Map<String, String> fromJsonString(String jsonString) {
 		if (jsonString == null) {
 			return new HashMap<String, String>();
@@ -907,15 +921,15 @@ public class CqlColumnFamilyDefinitionImpl implements ColumnFamilyDefinition {
 	public List<ColumnDefinition> getColumnDefinitionList() {
 		return allColumnsDefinitionList;
 	}
-	
+
 	public CFMutationQueryGen getMutationQueryGenerator() {
 		return mutationQueryGen;
 	}
-	
+
 	public CFRowQueryGen getRowQueryGenerator() {
 		return rowQueryGen;
 	}
-	
+
 	public void printOptionsMap() {
 		for (String key : optionsMap.keySet()) {
 			System.out.println(key + " " +  optionsMap.get(key));
