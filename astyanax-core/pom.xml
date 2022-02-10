@@ -38,20 +38,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.cassandra</groupId>
-            <artifactId>cassandra-all</artifactId>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.cassandra.deps</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
     </dependencies>
 
 </project>

@@ -42,16 +42,13 @@
         </dependency>
 
         <dependency>
-            <groupId>com.bazaarvoice.astyanax</groupId>
-            <artifactId>astyanax-thrift</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
         </dependency>
 
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
         </dependency>
     </dependencies>
 
