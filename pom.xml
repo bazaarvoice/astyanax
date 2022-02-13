@@ -50,7 +50,7 @@
         <jackson.version>1.9.13</jackson.version>
 
         <java.minimum.version>1.8</java.minimum.version>
-        <cassandra.version>3.11.11</cassandra.version>
+        <cassandra.version>3.11.12</cassandra.version>
         <jna.version>4.2.2</jna.version>
     </properties>
 
@@ -109,7 +109,7 @@
             <dependency>
                 <groupId>ch.qos.logback</groupId>
                 <artifactId>logback-classic</artifactId>
-                <version>1.2.0</version>
+                <version>1.2.9</version>
             </dependency>
             <dependency>
                 <groupId>io.dropwizard.metrics</groupId>
@@ -185,7 +185,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.25</version>
+                <version>1.7.32</version>
             </dependency>
             <dependency>
                 <groupId>org.xerial.snappy</groupId>
