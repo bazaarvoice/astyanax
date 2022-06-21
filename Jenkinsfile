@@ -22,28 +22,12 @@ pipeline {
 
   stages {
     stage('Build') {
-      agent {
-        label 'java/1.8-docker-ecr && environment/qa && account/bv-nexus-qa'
-      }
       steps {
-        script {
-          sh '''mvn -e verify -Ddependency-check.skip=true'''
-        }
-        stash 'astyanax-sources'
-      }
-    }
-    stage('Sonar scan') {
-      agent {
-        label 'java/11-docker-ecr && environment/qa && account/bv-nexus-qa'
-      }
-      steps {
-        unstash 'astyanax-sources'
         withSonarQubeEnv(installationName: 'Bazaarvoice QA SonarQube') {
-          sh '''mvn -e -Ddependency-check.skip=true sonar:sonar ${prKey} ${prBranch} ${prBase}'''
+          sh '''mvn -e verify -Ddependency-check.skip=true sonar:sonar ${prKey} ${prBranch} ${prBase}'''
         }
       }
     }
-  }
 
   post {
     success {
