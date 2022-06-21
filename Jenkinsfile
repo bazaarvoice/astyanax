@@ -39,7 +39,7 @@ pipeline {
       steps {
         unstash 'astyanax-sources'
         withSonarQubeEnv(installationName: 'Bazaarvoice QA SonarQube') {
-          sh '''mvn -e sonar:sonar ${prKey} ${prBranch} ${prBase}'''
+          sh '''mvn -e -Ddependency-check.skip=true sonar:sonar ${prKey} ${prBranch} ${prBase}'''
         }
       }
     }
