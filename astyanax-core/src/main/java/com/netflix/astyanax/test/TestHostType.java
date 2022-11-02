@@ -15,10 +15,10 @@
  ******************************************************************************/
 package com.netflix.astyanax.test;
 
+import java.security.SecureRandom;
 import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -305,7 +305,7 @@ public enum TestHostType {
         public <R> OperationResult<R> execute(
                 HostConnectionPool<TestClient> pool, Operation<TestClient, R> op)
                 throws ConnectionException {
-            if (counter.incrementAndGet() > new Random().nextInt(1000)) {
+            if (counter.incrementAndGet() > new SecureRandom().nextInt(1000)) {
                 counter.set(0);
                 throw new TransportException("TransportException");
             }
@@ -324,7 +324,7 @@ public enum TestHostType {
         public <R> OperationResult<R> execute(
                 HostConnectionPool<TestClient> pool, Operation<TestClient, R> op)
                 throws ConnectionException {
-            think(50 + new Random().nextInt(1000));
+            think(50 + new SecureRandom().nextInt(1000));
             throw new TimeoutException("thrashing_timeout");
         }
 
@@ -441,7 +441,7 @@ public enum TestHostType {
 
         @Override
         public void open(long timeout) throws ConnectionException {
-            double p = new Random().nextDouble();
+            double p = new SecureRandom().nextDouble();
             if (p < 0.002) {
                 throw new HostDownException("HostDownException");
             } else if (p < 0.004) {
