@@ -1,7 +1,7 @@
 package com.netflix.astyanax.test;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -12,7 +12,6 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.google.common.base.Function;
 import com.google.common.base.Supplier;
 import com.google.common.collect.Lists;
-import com.netflix.astyanax.connectionpool.Host;
 
 public class TestDriver {
     private int                         nThreads;
@@ -113,7 +112,7 @@ public class TestDriver {
                 @Override
                 public void run() {
                     try {
-                        Thread.sleep(new Random().nextInt(delta));
+                        Thread.sleep(new SecureRandom().nextInt(delta));
                     } catch (InterruptedException e1) {
                         throw new RuntimeException(e1);
                     }
