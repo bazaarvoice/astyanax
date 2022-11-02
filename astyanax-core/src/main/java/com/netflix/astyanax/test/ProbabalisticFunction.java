@@ -1,7 +1,7 @@
 package com.netflix.astyanax.test;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Random;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -50,7 +50,7 @@ public class ProbabalisticFunction<T, R> implements Function<T,R> {
     public R apply(T arg) {
         always.run();
         
-        double p = new Random().nextDouble();
+        double p = new SecureRandom().nextDouble();
         for (Entry<T,R> entry : functions) {
             if (entry.probability > p) {
                 return entry.function.apply(arg);
