@@ -1,10 +1,10 @@
 package com.netflix.astyanax.connectionpool.impl;
 
+import java.security.SecureRandom;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -93,7 +93,7 @@ public abstract class AbstractLatencyScoreStrategyImpl implements LatencyScoreSt
                     listener.onUpdate();
                     executor.schedule(this, getUpdateInterval(), TimeUnit.MILLISECONDS);
                 }
-            }, new Random().nextInt(getUpdateInterval()), TimeUnit.MILLISECONDS);
+            }, new SecureRandom().nextInt(getUpdateInterval()), TimeUnit.MILLISECONDS);
         }
 
         if (resetInterval > 0) {
@@ -105,7 +105,7 @@ public abstract class AbstractLatencyScoreStrategyImpl implements LatencyScoreSt
                     listener.onReset();
                     executor.schedule(this, getResetInterval(), TimeUnit.MILLISECONDS);
                 }
-            }, new Random().nextInt(getResetInterval()), TimeUnit.MILLISECONDS);
+            }, new SecureRandom().nextInt(getResetInterval()), TimeUnit.MILLISECONDS);
         }
     }
 
