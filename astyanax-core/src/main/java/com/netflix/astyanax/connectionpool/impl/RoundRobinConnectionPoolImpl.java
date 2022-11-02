@@ -18,8 +18,8 @@ package com.netflix.astyanax.connectionpool.impl;
 import com.netflix.astyanax.connectionpool.*;
 import com.netflix.astyanax.connectionpool.exceptions.*;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class RoundRobinConnectionPoolImpl<CL> extends AbstractHostPartitionConnectionPool<CL> {
 
-    private final AtomicInteger roundRobinCounter = new AtomicInteger(new Random().nextInt(997));
+    private final AtomicInteger roundRobinCounter = new AtomicInteger(new SecureRandom().nextInt(997));
     private static final int MAX_RR_COUNTER = Integer.MAX_VALUE/2;
 
     public RoundRobinConnectionPoolImpl(ConnectionPoolConfiguration config, ConnectionFactory<CL> factory,
