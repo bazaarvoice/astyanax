@@ -15,9 +15,12 @@ import com.netflix.astyanax.serializers.IntegerSerializer;
 import com.netflix.astyanax.serializers.LongSerializer;
 import com.netflix.astyanax.serializers.StringSerializer;
 import com.netflix.astyanax.thrift.ThriftFamilyFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class DualWritesDemo {
 
+    private static final Logger LOG = LoggerFactory.getLogger(DualWritesDemo.class);
     final String cluster1 = "cass_dualwrites_source";
     final String ks1 = "dualwritessrc";
     final String seed1 = "";
@@ -198,7 +201,7 @@ public class DualWritesDemo {
         try {
             new DualWritesDemo().run();
         } catch (Exception e) {
-            e.printStackTrace();
+            LOG.error(e.getStackTrace().toString());
         }
     }
 }
