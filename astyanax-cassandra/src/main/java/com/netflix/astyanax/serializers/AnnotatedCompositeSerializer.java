@@ -11,6 +11,8 @@ import com.netflix.astyanax.Serializer;
 import com.netflix.astyanax.annotations.Component;
 import com.netflix.astyanax.model.Equality;
 import com.netflix.astyanax.model.RangeEndpoint;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Serializer for a Pojo annotated with Component field annotations
@@ -23,6 +25,8 @@ import com.netflix.astyanax.model.RangeEndpoint;
  * @param <T>
  */
 public class AnnotatedCompositeSerializer<T> extends AbstractSerializer<T> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AnnotatedCompositeSerializer.class);
     private static final byte       END_OF_COMPONENT    = 0;
     private static final ByteBuffer EMPTY_BYTE_BUFFER   = ByteBuffer.allocate(0);
     private static final int        DEFAULT_BUFFER_SIZE = 128;
@@ -166,7 +170,7 @@ public class AnnotatedCompositeSerializer<T> extends AbstractSerializer<T> {
                 bb.put(END_OF_COMPONENT);
             }
             catch (Exception e) {
-				e.printStackTrace();
+				logger.error(e.toString());
                 throw new RuntimeException(e);
             }
         }
