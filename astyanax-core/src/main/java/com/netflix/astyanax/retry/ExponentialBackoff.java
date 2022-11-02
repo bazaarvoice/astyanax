@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.netflix.astyanax.retry;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -29,7 +29,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class ExponentialBackoff extends SleepingRetryPolicy {
     private final int MAX_SHIFT = 30;
     
-    private final Random random = new Random();
+    private final SecureRandom random = new SecureRandom();
     private final long baseSleepTimeMs;
 
     public ExponentialBackoff(long baseSleepTimeMs, int maxAttempts) {
