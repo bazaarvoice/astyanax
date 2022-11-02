@@ -3,10 +3,10 @@ package com.netflix.astyanax.recipes.queue;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.security.SecureRandom;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
@@ -17,6 +17,7 @@ import org.apache.cassandra.thrift.SchemaDisagreementException;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -148,11 +149,11 @@ public class ShardedDistributedMessageQueue implements MessageQueue {
     final static AnnotatedCompositeSerializer<MessageMetadataEntry>   metadataSerializer
         = new AnnotatedCompositeSerializer<MessageMetadataEntry>(MessageMetadataEntry.class);
 
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "className")
     static final ObjectMapper mapper = new ObjectMapper();
 
     {
         mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
-        mapper.enableDefaultTyping();
     }
 
     /**
@@ -346,7 +347,7 @@ public class ShardedDistributedMessageQueue implements MessageQueue {
                                                             };
 
     final MessageQueueStats               stats;
-    final AtomicLong                      counter             = new AtomicLong(new Random().nextInt(1000));
+    final AtomicLong                      counter             = new AtomicLong(new SecureRandom().nextInt(1000));
 
     private ShardedDistributedMessageQueue(Builder builder) throws MessageQueueException {
         this.queueColumnFamily    = ColumnFamily.newColumnFamily(builder.columnFamilyName + DEFAULT_QUEUE_SUFFIX,    StringSerializer.get(), entrySerializer);
