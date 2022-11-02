@@ -15,7 +15,7 @@
  ******************************************************************************/
 package com.netflix.astyanax.connectionpool.impl;
 
-import java.util.Random;
+import java.security.SecureRandom;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import com.netflix.astyanax.connectionpool.ConnectionPoolConfiguration;
@@ -76,7 +76,7 @@ public class ExponentialRetryBackoffStrategy implements RetryBackoffStrategy {
                 if (c > config.getRetryMaxDelaySlice())
                     c = config.getRetryMaxDelaySlice();
 
-                return (new Random().nextInt(c) + 1) * config.getRetryDelaySlice();
+                return (new SecureRandom().nextInt(c) + 1) * config.getRetryDelaySlice();
             }
 
             @Override
