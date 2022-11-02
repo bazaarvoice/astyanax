@@ -170,7 +170,7 @@ public class AnnotatedCompositeSerializer<T> extends AbstractSerializer<T> {
                 bb.put(END_OF_COMPONENT);
             }
             catch (Exception e) {
-				logger.error(e.toString());
+				logger.error(e.getStackTrace().toString());
                 throw new RuntimeException(e);
             }
         }

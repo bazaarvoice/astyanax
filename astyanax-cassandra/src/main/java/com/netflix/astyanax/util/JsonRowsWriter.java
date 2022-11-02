@@ -37,8 +37,12 @@ import com.netflix.astyanax.model.Column;
 import com.netflix.astyanax.model.ColumnList;
 import com.netflix.astyanax.model.Row;
 import com.netflix.astyanax.model.Rows;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JsonRowsWriter implements RowsWriter {
+
+    private static final Logger logger = LoggerFactory.getLogger(JsonRowsWriter.class);
     public interface ErrorHandler {
         boolean onException(Exception e);
     }
@@ -311,7 +315,7 @@ public class JsonRowsWriter implements RowsWriter {
                     columnString = serializers.columnAsString(column.getRawName());
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getStackTrace().toString());
                     if (!ignoreExceptions) {
                         throw e;
                     }
@@ -323,7 +327,7 @@ public class JsonRowsWriter implements RowsWriter {
                     valueString = serializers.valueAsString(column.getRawName(), column.getByteBufferValue());
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getStackTrace().toString());
                     if (!ignoreExceptions) {
                         throw e;
                     }
@@ -392,7 +396,7 @@ public class JsonRowsWriter implements RowsWriter {
                     columnString = serializers.columnAsString(column.getRawName());
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getStackTrace().toString());
                     if (!ignoreExceptions) {
                         throw e;
                     }
@@ -417,7 +421,7 @@ public class JsonRowsWriter implements RowsWriter {
                     valueString = serializers.valueAsString(column.getRawName(), column.getByteBufferValue());
                 }
                 catch (Exception e) {
-                    e.printStackTrace();
+                    logger.error(e.getStackTrace().toString());
                     if (!ignoreExceptions) {
                         throw e;
                     }
