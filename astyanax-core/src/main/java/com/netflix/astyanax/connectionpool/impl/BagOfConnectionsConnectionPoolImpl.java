@@ -2,7 +2,6 @@ package com.netflix.astyanax.connectionpool.impl;
 
 import java.security.SecureRandom;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
