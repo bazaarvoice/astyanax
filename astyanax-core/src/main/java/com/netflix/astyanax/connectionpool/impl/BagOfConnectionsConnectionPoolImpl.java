@@ -1,5 +1,6 @@
 package com.netflix.astyanax.connectionpool.impl;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -39,7 +40,7 @@ public class BagOfConnectionsConnectionPoolImpl<CL> extends AbstractHostPartitio
 
     private final LinkedBlockingQueue<Connection<CL>> idleConnections = new LinkedBlockingQueue<Connection<CL>>();
     private final AtomicInteger activeConnectionCount = new AtomicInteger(0);
-    private final Random randomIndex = new Random();
+    private final SecureRandom randomIndex = new SecureRandom();
 
     /**
      * @param config
