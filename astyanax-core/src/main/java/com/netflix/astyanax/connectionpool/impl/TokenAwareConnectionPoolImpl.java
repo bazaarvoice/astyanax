@@ -15,9 +15,9 @@
  ******************************************************************************/
 package com.netflix.astyanax.connectionpool.impl;
 
+import java.security.SecureRandom;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.netflix.astyanax.connectionpool.ConnectionFactory;
@@ -45,7 +45,7 @@ import com.netflix.astyanax.connectionpool.exceptions.NoAvailableHostsException;
  */
 public class TokenAwareConnectionPoolImpl<CL> extends AbstractHostPartitionConnectionPool<CL> {
 
-    private AtomicInteger roundRobinCounter = new AtomicInteger(new Random().nextInt(997));
+    private AtomicInteger roundRobinCounter = new AtomicInteger(new SecureRandom().nextInt(997));
     private static final int MAX_RR_COUNTER = Integer.MAX_VALUE/2;
 
     public TokenAwareConnectionPoolImpl(ConnectionPoolConfiguration configuration, ConnectionFactory<CL> factory,
