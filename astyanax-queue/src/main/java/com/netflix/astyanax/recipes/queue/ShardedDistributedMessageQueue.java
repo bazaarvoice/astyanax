@@ -149,7 +149,7 @@ public class ShardedDistributedMessageQueue implements MessageQueue {
     final static AnnotatedCompositeSerializer<MessageMetadataEntry>   metadataSerializer
         = new AnnotatedCompositeSerializer<MessageMetadataEntry>(MessageMetadataEntry.class);
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "className")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
     static final ObjectMapper mapper = new ObjectMapper();
 
     {
