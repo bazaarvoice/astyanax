@@ -187,7 +187,6 @@ public class ObjectWriter implements Callable<ObjectMetadata> {
         catch (Exception e) {
             callback.onFailure(e);
             LOG.warn(e.getMessage());
-            e.printStackTrace();
             try {
                 provider.deleteObject(objectName, nChunksWritten.get() + concurrencyLevel);
             }
