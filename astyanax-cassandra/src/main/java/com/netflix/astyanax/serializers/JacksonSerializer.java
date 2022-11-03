@@ -3,15 +3,17 @@ package com.netflix.astyanax.serializers;
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
 
+import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class JacksonSerializer<T> extends AbstractSerializer<T> {
+
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
     private static final ObjectMapper mapper = new ObjectMapper();
 
     static {
         mapper.getSerializationConfig().withSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
-        mapper.enableDefaultTyping();
     }
     
     private final Class<T> clazz;
