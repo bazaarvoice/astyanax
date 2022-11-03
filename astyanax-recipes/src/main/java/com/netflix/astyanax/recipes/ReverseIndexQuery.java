@@ -28,7 +28,10 @@ import com.netflix.astyanax.model.Rows;
 import com.netflix.astyanax.retry.RetryPolicy;
 import com.netflix.astyanax.retry.RunOnce;
 import com.netflix.astyanax.serializers.ByteBufferSerializer;
+import com.netflix.astyanax.util.JsonRowsWriter;
 import com.netflix.astyanax.util.RangeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Performs a search on a reverse index and fetches all the matching rows
@@ -53,6 +56,8 @@ import com.netflix.astyanax.util.RangeBuilder;
  *            Value type being indexed
  */
 public class ReverseIndexQuery<K, C, V> {
+
+    private static final Logger logger = LoggerFactory.getLogger(ReverseIndexQuery.class);
 
     public static <K, C, V> ReverseIndexQuery<K, C, V> newQuery(Keyspace ks, ColumnFamily<K, C> cf, String indexCf,
             Serializer<V> valSerializer) {
@@ -246,7 +251,7 @@ public class ReverseIndexQuery<K, C, V> {
                             .getKeySlice(keys).withColumnRange(range.setLimit(columnLimit).build()).execute();
                 }
                 catch (ConnectionException e) {
-                    e.printStackTrace();
+                    logger.error(e.getStackTrace().toString());
                     return;
                 }
 
@@ -316,7 +321,7 @@ public class ReverseIndexQuery<K, C, V> {
                                 .getKey(shard).withColumnRange(range.setLimit(pageSize).build()).execute().getResult();
                     }
                     catch (ConnectionException e) {
-                        e.printStackTrace();
+                        logger.error(e.getStackTrace().toString());
                         return;
                     }
 
@@ -364,7 +369,7 @@ public class ReverseIndexQuery<K, C, V> {
                     }
                 }
                 catch (ConnectionException e) {
-                    e.printStackTrace();
+                    logger.error(e.getStackTrace().toString());
                 }
             }
         };
