@@ -155,7 +155,7 @@ public abstract class CqlAbstractExecutionImpl<R> implements Execution<R> {
 				try {
 					result = parseResultSet(resultSet);
 				} catch (NotFoundException e) {
-					e.printStackTrace();
+					LOG.error(e.getStackTrace().toString());
 				}
 				tracer.success();
 				OperationResult<R> opResult = new CqlOperationResultImpl<R>(resultSet, result);
