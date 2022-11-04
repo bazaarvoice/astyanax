@@ -17,7 +17,6 @@ import org.apache.cassandra.thrift.SchemaDisagreementException;
 import org.apache.commons.lang.StringUtils;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.JsonParseException;
-import org.codehaus.jackson.annotate.JsonTypeInfo;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -149,11 +148,11 @@ public class ShardedDistributedMessageQueue implements MessageQueue {
     final static AnnotatedCompositeSerializer<MessageMetadataEntry>   metadataSerializer
         = new AnnotatedCompositeSerializer<MessageMetadataEntry>(MessageMetadataEntry.class);
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "type")
     static final ObjectMapper mapper = new ObjectMapper();
 
     {
         mapper.getSerializationConfig().setSerializationInclusion(JsonSerialize.Inclusion.NON_NULL);
+        mapper.enableDefaultTyping();
     }
 
     /**
