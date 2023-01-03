@@ -17,7 +17,7 @@ metadata:
     - emodb
     - java
     - astyanax
-    - jackson
+    - thrift
     - cassandra
 spec:
   type: tools
