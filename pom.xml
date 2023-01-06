@@ -6,7 +6,7 @@
         <groupId>com.bazaarvoice.commons</groupId>
         <artifactId>bv-opensource-super-pom</artifactId>
         <version>1.4</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <groupId>com.bazaarvoice.astyanax</groupId>
@@ -185,7 +185,7 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
-                <version>1.7.32</version>
+                <version>1.7.36</version>
             </dependency>
             <dependency>
                 <groupId>org.xerial.snappy</groupId>
@@ -326,9 +326,9 @@
                                     <version>[1.8,)</version>
                                     <message>requires Java 1.8</message>
                                 </requireJavaVersion>
-                                <dependencyConvergence />
-                                <requireUpperBoundDeps />
-                                <banDuplicatePomDependencyVersions />
+                                <dependencyConvergence/>
+                                <requireUpperBoundDeps/>
+                                <banDuplicatePomDependencyVersions/>
                             </rules>
                         </configuration>
                         <goals>
