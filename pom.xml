@@ -6,7 +6,7 @@
         <groupId>com.bazaarvoice.commons</groupId>
         <artifactId>bv-opensource-super-pom</artifactId>
         <version>1.4</version>
-        <relativePath />
+        <relativePath/>
     </parent>
 
     <groupId>com.bazaarvoice.astyanax</groupId>
@@ -50,7 +50,7 @@
         <jackson.version>1.9.13</jackson.version>
         <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
         <java.minimum.version>1.8</java.minimum.version>
-        <cassandra.version>3.11.12</cassandra.version>
+        <cassandra.version>3.11.14</cassandra.version>
         <jna.version>4.2.2</jna.version>
     </properties>
 
@@ -326,9 +326,9 @@
                                     <version>[1.8,)</version>
                                     <message>requires Java 1.8</message>
                                 </requireJavaVersion>
-                                <dependencyConvergence />
-                                <requireUpperBoundDeps />
-                                <banDuplicatePomDependencyVersions />
+                                <dependencyConvergence/>
+                                <requireUpperBoundDeps/>
+                                <banDuplicatePomDependencyVersions/>
                             </rules>
                         </configuration>
                         <goals>
