@@ -52,6 +52,7 @@
         <java.minimum.version>1.8</java.minimum.version>
         <cassandra.version>3.11.12</cassandra.version>
         <jna.version>4.2.2</jna.version>
+        <jersey.version>1.19.1</jersey.version>
     </properties>
 
     <dependencyManagement>
@@ -79,7 +80,7 @@
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>
-                <version>3.0.1</version>
+                <version>3.0.2</version>
             </dependency>
             <dependency>
                 <groupId>com.netflix.archaius</groupId>
@@ -89,7 +90,7 @@
             <dependency>
                 <groupId>com.netflix.eureka</groupId>
                 <artifactId>eureka-client</artifactId>
-                <version>1.10.17</version>
+                <version>1.1.110</version>
             </dependency>
             <dependency>
                 <groupId>commons-codec</groupId>
@@ -175,7 +176,7 @@
             <dependency>
                 <groupId>org.codehaus.jettison</groupId>
                 <artifactId>jettison</artifactId>
-                <version>1.2</version>
+                <version>1.5.2</version>
             </dependency>
             <dependency>
                 <groupId>io.netty</groupId>
@@ -234,8 +235,13 @@
             </dependency>
             <dependency>
                 <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-core</artifactId>
+                <version>${jersey.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
                 <artifactId>jersey-client</artifactId>
-                <version>1.9.1</version>
+                <version>${jersey.version}</version>
             </dependency>
             <dependency>
                 <groupId>javax.enterprise</groupId>
