@@ -3,14 +3,14 @@ package com.netflix.astyanax.serializers;
 import java.io.ByteArrayInputStream;
 import java.nio.ByteBuffer;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 public class JacksonSerializer<T> extends AbstractSerializer<T> {
     private static final ObjectMapper mapper = new ObjectMapper();
 
     static {
-        mapper.getSerializationConfig().withPropertyInclusion(JsonInclude.Value.construct(JsonInclude.Include.NON_EMPTY,JsonInclude.Include.NON_EMPTY));
+        mapper.getSerializationConfig().withSerializationInclusion(JsonSerialize.Inclusion.NON_EMPTY);
         mapper.enableDefaultTyping();
     }
     
