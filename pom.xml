@@ -51,7 +51,7 @@
         <jackson.databind.version>2.10.5.1</jackson.databind.version>
         <maven-surefire-plugin.version>3.0.0-M6</maven-surefire-plugin.version>
         <java.minimum.version>1.8</java.minimum.version>
-        <cassandra.version>3.11.14</cassandra.version>
+        <cassandra.version>3.11.15</cassandra.version>
         <jna.version>4.2.2</jna.version>
         <jersey.version>1.19.1</jersey.version>
     </properties>
