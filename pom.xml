@@ -6,12 +6,12 @@
         <groupId>com.bazaarvoice.commons</groupId>
         <artifactId>bv-opensource-super-pom</artifactId>
         <version>1.4</version>
-        <relativePath/>
+        <relativePath />
     </parent>
 
     <groupId>com.bazaarvoice.astyanax</groupId>
     <artifactId>astyanax</artifactId>
-    <version>3.8.0-bv14-SNAPSHOT</version>
+    <version>3.8.0-bv14</version>
 
     <name>astyanax</name>
     <description>astyanax developed by Netflix</description>
@@ -43,7 +43,7 @@
         <connection>scm:git:git@github.com:bazaarvoice/astyanax.git</connection>
         <developerConnection>scm:git:git@github.com:bazaarvoice/astyanax.git</developerConnection>
         <url>scm:git:git@github.com:bazaarvoice/astyanax.git</url>
-      <tag>astyanax-3.8.0-bv7</tag>
+      <tag>astyanax-3.8.0-bv14</tag>
   </scm>
 
     <properties>
@@ -344,9 +344,9 @@
                                     <version>[1.8,)</version>
                                     <message>requires Java 1.8</message>
                                 </requireJavaVersion>
-                                <dependencyConvergence/>
-                                <requireUpperBoundDeps/>
-                                <banDuplicatePomDependencyVersions/>
+                                <dependencyConvergence />
+                                <requireUpperBoundDeps />
+                                <banDuplicatePomDependencyVersions />
                             </rules>
                         </configuration>
                         <goals>
